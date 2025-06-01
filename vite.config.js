@@ -7,15 +7,15 @@ export default defineConfig(({ mode, command }) => {
   // Log the API_KEY as seen by Vite during the build process
   // This log will appear in Vercel's build logs
   console.log(`[vite.config.js] Build command: ${command}, Mode: ${mode}`);
-  const apiKeyFromEnv = process.env.API_KEY;
-  console.log(`[vite.config.js] API_KEY from build environment: "${apiKeyFromEnv}"`);
+  
+  // LEER DESDE CLAVE_API (o el nombre que Vercel te obligue a usar)
+  const apiKeyFromVercelEnv = process.env.CLAVE_API; 
+  console.log(`[vite.config.js] Value from Vercel's CLAVE_API environment variable: "${apiKeyFromVercelEnv}"`);
 
-  if (command === 'build' && !apiKeyFromEnv) {
+  if (command === 'build' && !apiKeyFromVercelEnv) {
     console.warn(
-      '[vite.config.js] WARNING: API_KEY is not defined or empty in the build environment! The application will likely fail to connect to the Gemini API.'
+      '[vite.config.js] WARNING: CLAVE_API (or the name Vercel uses) is not defined or empty in the build environment! The application will likely fail to connect to the Gemini API. Ensure CLAVE_API is set in Vercel environment variables.'
     );
-    // Consider failing the build if the API key is absolutely mandatory:
-    // throw new Error("API_KEY is not defined for production build. Please set it in Vercel environment variables.");
   }
 
   return {
@@ -29,11 +29,11 @@ export default defineConfig(({ mode, command }) => {
       },
     },
     // Define global constants replacements
-    // This is crucial for process.env.API_KEY to work in client-side code
+    // This is crucial for process.env.API_KEY to work in client-side code (index.tsx)
     define: {
-      'process.env.API_KEY': JSON.stringify(apiKeyFromEnv),
-      // You can define other environment variables here if needed
-      // 'process.env.NODE_ENV': JSON.stringify(mode),
+      // Tu código cliente (index.tsx) espera process.env.API_KEY.
+      // Aquí, tomamos el valor de CLAVE_API (leído de Vercel) y lo asignamos a process.env.API_KEY.
+      'process.env.API_KEY': JSON.stringify(apiKeyFromVercelEnv),
     },
     resolve: {
       alias: {
