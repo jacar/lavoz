@@ -1,0 +1,8 @@
+
+{
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "name": "Asistente de Voz (Live Audio)",
+  "description": "Asistente de voz con visualizaciones 3D y audio en tiempo real."
+}
